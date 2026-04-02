@@ -1,12 +1,25 @@
 # LLM Knowledge Bases
 
-A system of Claude Code skills that turn raw source documents into a living, LLM-maintained personal knowledge base, viewable as an Obsidian wiki.
+A Claude Code plugin that turns raw research material into an LLM-maintained Obsidian wiki -- inspired by [Andrej Karpathy's description](https://x.com/karpathy/status/2039805659525644595) of using LLMs as knowledge compilers rather than just code manipulators.
 
-Raw data from various sources is collected, compiled by an LLM into a `.md` wiki, then operated on by various workflows to do Q&A, health checks, and self-improvement. You rarely edit the wiki manually -- it's the domain of the LLM.
+You drop source material into `raw/`, run a single command, and Claude handles the rest: compiling interlinked wiki articles, maintaining indexes and backlinks, answering complex questions at multiple depth levels, and continuously improving the knowledge base over time.
+
+The LLM owns the wiki. You rarely edit it manually -- just explore in Obsidian and keep feeding it raw data.
+
+## How It Works
+
+1. **Ingest** -- Raw documents (articles, papers, repos, YouTube transcripts, images, datasets) go into `raw/`
+2. **Compile** -- Claude builds a structured Obsidian vault with summaries, backlinks, concept articles, and auto-generated indexes
+3. **Query** -- Three depth levels:
+   - **Quick** -- Answers from wiki indexes and summaries alone
+   - **Standard** -- Cross-references the full wiki, supplements with web search
+   - **Deep** -- Multi-agent research pipeline with parallel web search agents
+4. **Output** -- Markdown reports, Marp slides, matplotlib charts -- saved to `output/` and optionally filed back into the wiki
+5. **Maintain** -- Automated health checks (broken links, orphans, inconsistencies) and suggestions for new articles and connections
 
 ## Prerequisites
 
-- [Claude Code](https://docs.anthropic.com/en/docs/claude-code) (CLI)
+- [Claude Code](https://docs.anthropic.com/en/docs/claude-code) (CLI), installed and authenticated
 - [Obsidian](https://obsidian.md)
 - Recommended Obsidian plugins: Web Clipper, Marp Slides, Dataview
 
@@ -19,36 +32,51 @@ In Claude Code, run:
 /plugin install kb@llm-knowledge-bases
 ```
 
-That's it. All skills (`kb-init`, `kb`, `research`, `research-deep`, etc.) are installed as a single plugin.
+All skills are installed as a single plugin.
 
 ## Quick Start
 
-1. Install the skills using one of the methods above.
-2. Run `/kb-init` to bootstrap a new knowledge base.
-3. Add raw sources to `raw/`.
-4. Ask Claude to "compile the wiki".
+```bash
+# Initialize a new knowledge base
+/kb-init
 
-## Available Workflows
+# Add sources to raw/, then compile the wiki
+/kb compile
 
-- **Compile** -- Incrementally turns raw sources into wiki articles. Processes each source, extracts key information, and produces interlinked Obsidian-compatible markdown.
-- **Query** -- Q&A at three depth levels: Quick (instant lookup), Standard (cross-referenced answer), and Deep (multi-agent research pipeline).
-- **Lint** -- Health checks for broken links, orphan pages, tag consistency, and structural issues across the wiki.
-- **Evolve** -- Suggests improvements to existing articles, finds gaps in coverage, and surfaces new connections between topics.
+# Query the knowledge base
+/kb query
 
-## Supported Source Types
+# Run a health check
+/kb lint
 
-Web articles, academic papers, GitHub repos, local markdown, images, YouTube transcripts, datasets.
+# Deep multi-agent research on a topic
+/research <topic>
+/research-deep
+```
 
-## Directory Structure (after running kb-init)
+## Available Skills
+
+| Skill | Purpose |
+|-------|---------|
+| `kb-init` | One-time setup: scaffolds directories, generates config, writes project files |
+| `kb` | Main skill with four workflows: compile, query, lint, evolve |
+| `research` | Generate a structured research outline for a topic |
+| `research-deep` | Launch parallel agents for deep research on each outline item |
+| `research-add-fields` | Add field definitions to an existing research outline |
+| `research-add-items` | Add research targets to an existing outline |
+| `research-report` | Compile deep research results into a markdown report |
+
+## Directory Structure (after `/kb-init`)
 
 ```
 raw/           -- Raw source documents
-wiki/          -- Compiled wiki (Obsidian vault)
-output/        -- Query results, reports, visualizations
+wiki/          -- LLM-compiled Obsidian vault
+output/        -- Query results, slides, charts, reports
 kb.yaml        -- Configuration
 CLAUDE.md      -- Project instructions for Claude
 ```
 
-## Research Skills Attribution
+## Attribution
 
-The deep research pipeline (used for Deep query depth) is based on skills originally authored by [Weizhena](https://github.com/Weizhena/Deep-Research-skills).
+- [Andrej Karpathy](https://x.com/karpathy/status/2039805659525644595) -- Original vision for LLM-maintained knowledge bases
+- [Weizhena](https://github.com/Weizhena/Deep-Research-skills) -- Deep Research skills adapted for the research pipeline
