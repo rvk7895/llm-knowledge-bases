@@ -1,6 +1,6 @@
 {
   "name": "kb",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Build and maintain LLM-powered knowledge bases as Obsidian wikis with compile, query, lint, and evolve workflows",
   "author": {
     "name": "rvk7895"
