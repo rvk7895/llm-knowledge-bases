@@ -149,13 +149,41 @@ Do NOT suggest filing when the output is just a reformatting or summary of exist
 6. **Missing backlinks** -- links that should be bidirectional but aren't
 7. **Sparse articles** -- articles below ~200 words
 
+### Coverage Density Scoring
+
+For every article, compute a coverage score and tag it `high`, `medium`, or `low`:
+
+| Signal | Weight |
+|--------|--------|
+| Number of raw sources that contributed to the article | High |
+| Word count (high ≥ 400, medium 200-399, low < 200) | Medium |
+| Number of inbound `[[wikilinks]]` from other articles | Medium |
+| Number of outbound `[[wikilinks]]` to other articles | Low |
+
+**Scoring:**
+- `high` -- strong source backing, substantial content, well-linked
+- `medium` -- partially covered; one or more signals are weak
+- `low` -- thin article: few sources, short content, or isolated from the rest of the wiki
+
+Write the coverage tag into each article's frontmatter during lint:
+
+```yaml
+coverage: high | medium | low
+```
+
+This tag lets Claude use articles efficiently during Query: high-coverage articles are read with confidence; low-coverage articles are treated as provisional and supplemented with web search when the user picks Standard depth.
+
+After tagging, report a coverage summary:
+- Total articles by coverage level
+- Low-coverage articles as a prioritized enrichment list
+
 ### Opus Collation
 
 Opus collates all findings, filters false positives, and prioritizes by severity (critical > warning > info).
 
 ### Output
 
-Save to `output/lint-YYYY-MM-DD.md`. Group issues by severity, include suggested fixes, and ask the user if they want auto-fix applied.
+Save to `output/lint-YYYY-MM-DD.md`. Group issues by severity, include suggested fixes, coverage summary, and ask the user if they want auto-fix applied.
 
 ## Workflow 4: Evolve
 
