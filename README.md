@@ -75,6 +75,7 @@ All skills are installed as a single plugin.
 | `kb-connect` | Discover hidden connections, contradictions, and synthesis opportunities across articles |
 | `kb-diagram` | Generate Mermaid concept maps, dependency graphs, and timelines from wiki content |
 | `kb-learn` | Feynman technique learning: quiz, deep dive, gap analysis, and scan modes |
+| `kb-project` | Compile a codebase into a wiki — architecture, decisions, evolution, ownership — reads repo and git history directly |
 | `research` | Generate a structured research outline for a topic |
 | `research-deep` | Launch parallel agents for deep research on each outline item |
 | `research-add-fields` | Add field definitions to an existing research outline |
@@ -86,6 +87,7 @@ All skills are installed as a single plugin.
 | Skill | Purpose |
 |-------|---------|
 | `wiki` | Compile personal data (journals, notes, messages, Day One, Apple Notes) into a personal knowledge wiki. Ingest any format, absorb entries into articles, query, cleanup, breakdown. |
+| `wiki-reflect` | Synthesize your wiki over time — monthly and yearly reviews, topic evolution, decision outcomes, recurring patterns. |
 
 ## Directory Structure (after `/kb-init`)
 
