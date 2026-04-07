@@ -21,7 +21,8 @@ The LLM owns the wiki. You rarely edit it manually -- just explore in Obsidian a
 
 - [Claude Code](https://docs.anthropic.com/en/docs/claude-code) (CLI), installed and authenticated
 - [Obsidian](https://obsidian.md)
-- Recommended Obsidian plugins: Web Clipper, Marp Slides, Dataview
+
+Obsidian plugins (Dataview, Obsidian Git, etc.) are installed automatically by the setup script during `/kb-init`.
 
 ## Installation
 
@@ -75,6 +76,20 @@ output/        -- Query results, slides, charts, reports
 kb.yaml        -- Configuration
 CLAUDE.md      -- Project instructions for Claude
 ```
+
+## X/Twitter Integration (Optional)
+
+To ingest tweets, threads, and bookmarks from X, install [Smaug](https://github.com/alexknowshtml/smaug):
+
+```bash
+npm install -g @steipete/bird
+git clone https://github.com/alexknowshtml/smaug && cd smaug && npm install
+npx smaug setup  # configures X session cookies
+```
+
+Once configured, paste any `x.com` link and the kb skill will fetch and compile it automatically. Without Smaug, you can still add X content by pasting tweet text directly or using [Thread Reader App](https://threadreaderapp.com) for threads.
+
+**Note:** Smaug uses X session cookies for read-only access to your own data. This is not officially supported by X's TOS. Practical risk for personal use is very low, but be aware.
 
 ## Attribution
 

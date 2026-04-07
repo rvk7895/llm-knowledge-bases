@@ -59,6 +59,7 @@ Ask how the user wants to get raw data in:
   - Images/diagrams: Place in `raw/images/`
   - YouTube transcripts: Transcript tool -> `raw/transcripts/`
   - Datasets (CSV, JSON): Place in `raw/datasets/`
+  - X/Twitter posts: Via [Smaug](https://github.com/alexknowshtml/smaug) (optional) -> `raw/articles/`
 - **Assisted** -- Claude fetches via WebFetch, Bash (clone repos, download PDFs, pull transcripts)
 - **Mixed** -- Some of each
 
