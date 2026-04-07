@@ -195,22 +195,35 @@ Save to `output/lint-YYYY-MM-DD.md`. Group issues by severity, include suggested
 
 When the user pastes an `x.com` or `twitter.com` URL and wants it added to the knowledge base:
 
-### Step 1: Check if Smaug is available
+### Step 1: Check if Smaug is configured
 
-Run via Bash: `which bird 2>/dev/null && test -f smaug.config.json && echo "smaug-ready" || echo "smaug-missing"`
+Read `kb.yaml` and look for `integrations.smaug.path`. If it exists, verify the path is still valid:
+
+```bash
+test -d "<smaug_path>" && test -f "<smaug_path>/smaug.config.json" && echo "smaug-ready" || echo "smaug-missing"
+```
+
+If `integrations.smaug` is not in `kb.yaml`, try finding it:
+
+```bash
+which bird 2>/dev/null && find ~ -maxdepth 4 -name "smaug.config.json" -type f 2>/dev/null | head -1
+```
+
+If found, **save the path to `kb.yaml`** under `integrations.smaug.path` so future sessions don't need to search again.
 
 ### Step 2a: Smaug IS available
 
-1. Extract the tweet ID from the URL (the numeric part after `/status/`)
-2. Run: `npx smaug fetch <tweet_id>` then `npx smaug process`
-3. Smaug outputs markdown with frontmatter to its `knowledge/` directory
-4. Copy the output to `raw/articles/` and trigger Compile
+1. `cd` to the Smaug path from `kb.yaml`
+2. Extract the tweet ID from the URL (the numeric part after `/status/`)
+3. Run: `npx smaug fetch <tweet_id>` then `npx smaug process`
+4. Smaug outputs markdown with frontmatter to its `knowledge/` directory
+5. Copy the output to `raw/articles/` and trigger Compile
 
 ### Step 2b: Smaug is NOT available
 
 Tell the user you cannot directly fetch X/Twitter content, then present these options:
 
-1. **Install Smaug** (recommended) — `git clone https://github.com/alexknowshtml/smaug && cd smaug && npm install`, then `npx smaug setup` to configure X session cookies (`auth_token` + `ct0` from browser DevTools → Cookies → x.com). Note: uses session cookies, technically violates X TOS but practical risk for personal read-only use is very low.
+1. **Install Smaug** (recommended) — `git clone https://github.com/alexknowshtml/smaug && cd smaug && npm install`, then `npx smaug setup` to configure X session cookies (`auth_token` + `ct0` from browser DevTools → Cookies → x.com). After setup, **save the install path to `kb.yaml`** under `integrations.smaug.path`. Note: uses session cookies, technically violates X TOS but practical risk for personal read-only use is very low.
 2. **Manual paste** — ask the user to copy-paste the tweet/thread text. Save to `raw/articles/x-<tweet_id>.md` with the tweet URL as a source link.
 3. **Thread Reader App** — for threads, suggest pasting the URL at threadreaderapp.com, then copy the unrolled result.
 4. **X Data Export** — for bulk import of own tweets/bookmarks: X Settings → Download your data (TOS-compliant, 24-48hr wait).

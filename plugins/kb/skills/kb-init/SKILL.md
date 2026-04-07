@@ -76,7 +76,15 @@ Inform about options:
 
 ### 5. Generate `kb.yaml`
 
-Write `kb.yaml` at project root with paths, `output_formats`, and obsidian config.
+Write `kb.yaml` at project root with paths, `output_formats`, obsidian config, and an `integrations` section. Example:
+
+```yaml
+integrations:
+  smaug:
+    path: null  # set automatically when Smaug is installed
+```
+
+When the user sets up Smaug (during init or later), save the install path here. The kb skill reads this to find Smaug without searching every time.
 
 ### 6. Scaffold Directories
 
