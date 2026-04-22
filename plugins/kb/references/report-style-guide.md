@@ -38,6 +38,12 @@ Tone and sentence-level style.
 
 Plain, direct language. Short sentences — split multi-idea sentences on an em-dash or semicolon rather than stacking clauses with "and", "which", "that". Drop academic connectives (`notably`, `crucially`, `indeed`, `it should be noted`, `moreover`, `furthermore`). Active voice. First person is allowed and preferred over hedges like "one might observe". Contractions are fine. Paragraphs run 3–5 sentences, not 10-sentence walls. Prefer plain words over Latinate alternatives: `use` not `utilize`, `show` not `demonstrate`, `because` not `owing to the fact that`, `help` not `facilitate`, `about` not `with respect to`, `part` not `component` (usually), `thing` when it's actually just a thing.
 
+**No scaffolding.** Drop sentences that announce what the next section will do. "This subsection explains X", "before we discuss Y, let's set the scene", "the four subsections below follow the same template: 1. ... 2. ..." — all scaffolding. The reader discovers structure by reading. Drop forward-reference promises too ("we'll come back to this", "more on this below"); just come back to it when you do.
+
+**No production-process narration.** Describe what was surveyed and which sources were consulted, not who/what did the surveying or what pipeline produced the output. "We reviewed the README, DeepWiki pages, and arXiv paper per system" is fine; "N parallel sub-agents made X tool calls", "drawn from per-item JSONs with 100% validator coverage", "each sub-agent covered 2 items" are not. Pipeline artifacts are irrelevant to a reader trying to understand findings.
+
+**No self-evaluation.** Don't grade your own analysis inside the analysis. "The report's sharpest original analysis", "this is the most important insight", "the key takeaway here" are self-grading. Present the analysis; let the reader judge what's sharp or important. You can label a section "Where this might be wrong" — that's flagging a weakness, not grading a strength.
+
 ### Variant (formal)
 
 Formal, polished prose suitable for a paper or white paper. Full sentences, no contractions. Third person or impersonal constructions OK. Academic connectives are fine in moderation — but still don't overuse them. Defined technical vocabulary expected; glossaries optional. Paragraph length flexible.
