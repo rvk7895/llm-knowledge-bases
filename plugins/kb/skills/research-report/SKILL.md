@@ -1,7 +1,7 @@
 ---
 user-invocable: true
 description: Summarize deep research results into a markdown report, covering all fields, skipping uncertain values.
-allowed-tools: Read, Write, Glob, Bash, AskUserQuestion
+allowed-tools: Read, Write, Edit, Glob, Bash, AskUserQuestion
 ---
 > **Attribution:** Originally authored by [Weizhena](https://github.com/Weizhena/Deep-Research-skills). Included with attribution for use in the Deep query workflow.
 
@@ -11,6 +11,20 @@ allowed-tools: Read, Write, Glob, Bash, AskUserQuestion
 `/research-report`
 
 ## Execution Flow
+
+### Step 0: Load Report Preferences
+
+Read the vault's `kb.yaml` and extract the `report_preferences:` block. These are free-text prose instructions written by the user at init (`kb-init` §5.5) or via `/kb-preferences`. They control audience, register, depth, code handling, diagrams, self-containment, citations, and argument iteration for this report.
+
+**If the block is present:** apply every field as an instruction to the prose you write in subsequent steps. Treat the field text literally — it is the working rule, not a keyword list. The Python generator script written in Step 3 should also respect these preferences (e.g., if `depth` asks for multi-paragraph per-item walkthroughs, emit the item template with multi-paragraph slots; if `diagrams` says ASCII-only, don't emit mermaid).
+
+**If the block is missing:** fall back to factory defaults in `plugins/kb/references/report-style-guide.md` silently and include this line in the final report output:
+
+> No `report_preferences` set in `kb.yaml` — using factory defaults. Run `/kb-preferences init` to customize.
+
+**If `kb.yaml` itself is missing:** tell the user to run `kb-init` and stop.
+
+**Per-task overrides.** If the user's current request explicitly contradicts a stored preference ("make this one short", "skip the diagrams for this report"), follow the request for this report only. Do NOT modify `kb.yaml` — that's what the reflection step is for.
 
 ### Step 1: Locate Results Directory
 Find `*/outline.yaml` in current working directory, read topic and output_dir configuration.
@@ -88,6 +102,24 @@ Skip conditions:
 ### Step 4: Execute Script
 Run `python {topic}/generate_report.py`
 
+### Step 5: Preference Reflection
+
+After `report.md` is written, scan the conversation for preference signals — moments where the user corrected your approach, accepted a non-obvious style choice silently, or said "remember this" / "for every work I do, remember X".
+
+Follow the **Reflection Protocol** defined in `plugins/kb/skills/kb-preferences/SKILL.md`:
+
+1. Scan for signals tied to specific `report_preferences` fields.
+2. If signals found, propose concrete edits (show old-value excerpt → new-value excerpt).
+3. Present proposals as a numbered list. Ask the user: `[a] all / [n] none / [e] edit each / [1,3] subset`.
+4. On approval, write updates to `kb.yaml` and append entries to `.meta/_preference_history.md` with trigger `reflection after /research-report`.
+5. If no signals found, skip silently.
+
+**Signal strength rules** (from kb-preferences):
+- Don't propose a change for a single offhand remark. Require explicit "remember this" phrasing, two occurrences, or feedback directly tied to this report.
+- Don't propose contradictory changes. If the current field already captures the feedback, skip.
+- Keep field text under ~400 words total. If a field would bloat past that, start a `notes` bullet instead.
+
 ## Output
 - `{topic}/generate_report.py` - Conversion script
-- `{topic}/report.md` - Summary report
+- `{topic}/report.md` - Summary report (styled per `report_preferences:` in `kb.yaml`)
+- Optionally: updates to `kb.yaml` + one or more appended entries in `.meta/_preference_history.md` if the reflection step produced approved changes
